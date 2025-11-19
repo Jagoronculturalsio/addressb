@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAGORON - Venue & Address</title>
+    <title>JAGORON - Cultural Heart</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Inter Font & Hind Siliguri for Bengali -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN for Address Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
             background-color: #f7f7f7;
+        }
+        /* Specific font for Bengali text areas if needed, though body handles it */
+        .font-bengali {
+            font-family: 'Hind Siliguri', sans-serif;
         }
         .nav-button:hover {
             color: #4f46e5;
@@ -40,92 +44,98 @@
             overflow: hidden;
             height: 400px; /* Fixed height for the map section */
         }
+        /* Ensures the header background is visible through the opacity, and the backdrop blur makes it smooth */
+        .nav-transparent {
+            background-color: rgba(255, 255, 255, 0.3); 
+            backdrop-filter: blur(8px); 
+        }
     </style>
 </head>
 <body class="min-h-screen">
-    <div id="app" class="container mx-auto p-4 md:p-8">
-
-        <!-- Navigation Bar (Identical to others, but 'Address' is active) -->
-        <header class="flex flex-col md:flex-row justify-between items-center bg-white p-4 md:p-6 rounded-xl shadow-lg mb-12 sticky top-0 z-50">
+    <!-- Header is now outside the main container div to achieve full width, but still sticky -->
+    <header class="w-full flex justify-center sticky top-0 z-50 nav-transparent shadow-lg mb-12">
+        <!-- Inner container to keep content centered and padded -->
+        <div class="container mx-auto px-4 md:px-8 flex justify-between items-center py-4 md:py-6">
             
-            <!-- Left Group: JAGORON and Home -->
-            <div class="flex flex-col md:flex-row items-center mb-4 md:mb-0">
-                <!-- JAGORON Text -->
-                <div class="text-3xl font-extrabold text-indigo-600 tracking-wider mb-2 md:mb-0 md:mr-6">
-                    <!-- Updated: Link to Home page URL -->
-                    <a href="https://jagoronculturalsio.github.io/home/">JAGORON</a>
+            <!-- Left Group: JAGORON (Hidden Mobile) and Home Button -->
+            <div class="flex items-center">
+                <!-- JAGORON Text: Hidden on mobile, visible from md breakpoint -->
+                <!-- UPDATED: Text changed to Bengali 'জাগরণ' -->
+                <div class="hidden md:block text-3xl font-extrabold text-indigo-600 tracking-wider md:mr-6 font-bengali">
+                    <a href="https://jagoronculturalsio.github.io/home/">জাগরণ</a>
                 </div>
-                <!-- Home Button (Standard) -->
+                <!-- Home Button -->
                 <a href="https://jagoronculturalsio.github.io/home/" id="homeButton" 
-                   class="nav-button px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">
+                   class="nav-button text-xs px-1.5 py-0.5 md:text-base md:px-4 md:py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">
                     Home
                 </a>
             </div>
             
-            <!-- Right Group: Nav Links (About, Contact, Address, Ticket) -->
-            <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4 font-semibold">
-                <!-- Updated: Link to About page URL -->
-                <a href="https://jagoronculturalsio.github.io/about/" class="nav-button p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">About</a>
-                <!-- Updated: Link to Contact page URL -->
-                <a href="https://jagoronculturalsio.github.io/contact/" class="nav-button p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">Contact</a>
-                <!-- Address Button (Highlighted/Active) -->
-                <!-- Updated: Link to Address page URL -->
-                <a href="https://jagoronculturalsio.github.io/address/" class="nav-button nav-active px-4 py-2 rounded-lg transition duration-300">Address</a>
-                <!-- TickeT button - Standard style, link is handled by JS -->
+            <!-- Right Group: Nav Links (About, Contact, Location, Ticket) - KEPT IN ENGLISH -->
+            <nav class="flex space-x-0.5 md:space-x-4 font-semibold">
+                <a href="https://jagoronculturalsio.github.io/about/" class="nav-button text-xs px-1.5 py-0.5 md:text-base md:px-4 md:py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">About</a>
+                <a href="https://jagoronculturalsio.github.io/contact/" class="nav-button text-xs px-1.5 py-0.5 md:text-base md:px-4 md:py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-300">Contact</a>
+                <!-- Location Active Button -->
+                <a href="https://jagoronculturalsio.github.io/address/" class="nav-button nav-active text-xs px-1.5 py-0.5 md:text-base md:px-4 md:py-2 rounded-lg transition duration-300">Location</a>
+                <!-- Ticket Button -->
                 <button id="navTicketButton" 
-                    class="nav-button text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm border border-gray-200"
+                    class="nav-button text-gray-700 text-xs px-1.5 py-0.5 md:text-base md:px-4 md:py-2 rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm border border-gray-200"
                     onclick="handleTicketClick()">
                     Ticket
                 </button>
             </nav>
-        </header>
+        </div>
+    </header>
 
+    <!-- Main Content Area -->
+    <div id="app" class="container mx-auto p-4 md:p-8 pt-0"> 
         <main class="space-y-12">
 
             <!-- Title Section -->
-            <section class="text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-2">
-                    Venue Details for <span class="text-indigo-600">JAGORON 2026</span>
+            <section class="text-center font-bengali">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
+                    শহরের <span class="text-indigo-600">সাংস্কৃতিক প্রাণকেন্দ্রে</span> আসার পথ খুঁজে নিন
                 </h1>
-                <p class="text-xl text-gray-500">Find your way to the cultural heart of the city.</p>
             </section>
 
             <!-- Address and Details Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-bengali">
                 
                 <!-- 1. Venue Details Card -->
                 <section class="address-card p-6 md:p-10 space-y-6">
                     <h2 class="text-3xl font-bold text-gray-700 flex items-center mb-4">
                         <i data-lucide="map-pin" class="w-7 h-7 text-indigo-600 mr-3"></i> 
-                        Main Venue Address
+                        প্রধান অনুষ্ঠানের ঠিকানা
                     </h2>
                     
+                    <!-- ADDRESS BLOCK -->
                     <div class="text-gray-600 space-y-4 text-lg">
                         <p>
-                            **The Grand Cultural Hall** (Poush Mela Grounds)
+                            <strong>গোপালপুর হাউস, রাজারহাট, উত্তর ২৪ পরগনা</strong> (প্রধান অনুষ্ঠান প্রাঙ্গণ)
                         </p>
                         <p>
-                            5/A, Kabi Nazrul Sarani Road,<br>
-                            Near City Center Bus Stand,<br>
-                            Kolkata - 700064,<br>
-                            West Bengal, India.
+                            গোপালপুর হাউস এসআরএমসি রোড,<br>
+                            সালুয়া,<br>
+                            পশ্চিমবঙ্গ ৭০০১৩৬।
                         </p>
                     </div>
 
                     <div class="pt-4 border-t mt-6">
-                        <h3 class="text-xl font-bold text-gray-700 mb-2">Key Information</h3>
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">জরুরি তথ্য</h3>
                         <ul class="space-y-2 text-gray-600">
+                            <!-- DATE -->
                             <li class="flex items-center">
                                 <i data-lucide="calendar" class="w-5 h-5 text-indigo-500 mr-2"></i>
-                                **Date:** February 21 - February 25, 2026
+                                <strong>তারিখ:</strong> ২৮ ডিসেম্বর, ২০২৫
                             </li>
+                            <!-- TIME -->
                             <li class="flex items-center">
                                 <i data-lucide="clock" class="w-5 h-5 text-indigo-500 mr-2"></i>
-                                **Time:** 10:00 AM to 10:00 PM Daily
+                                <strong>সময়:</strong> সকাল ১০:০০টা থেকে
                             </li>
                             <li class="flex items-center">
                                 <i data-lucide="car" class="w-5 h-5 text-indigo-500 mr-2"></i>
-                                **Parking:** Available (Paid lot)
+                                <strong>পার্কিং:</strong> ব্যবস্থা আছে (পেইড)
                             </li>
                         </ul>
                     </div>
@@ -133,57 +143,68 @@
                     <button 
                         class="w-full bg-indigo-500 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md mt-6"
                         onclick="getDirections()">
-                        Get Directions on Map
+                        ম্যাপে দিকনির্দেশ দেখুন
                     </button>
                 </section>
 
-                <!-- 2. Interactive Map (Placeholder for Embed) -->
+                <!-- 2. Interactive Map (Embedded Google Map) -->
                 <section class="map-container">
-                    <!-- 
-                        Real applications embed a Google Map or similar iframe here.
-                        We use a placeholder for single-file compatibility.
-                    -->
-                    <div id="mapPlaceholder" class="w-full h-full bg-gray-200 flex items-center justify-center text-center p-4">
-                        <p class="text-gray-500 font-medium">
-                            [Image of a Location Pin on a Map]<br>
-                            Interactive Map Placeholder<br>
-                            Embed from Google Maps or similar service goes here in a live environment.
-                        </p>
-                    </div>
+                    <iframe 
+                        src="https://maps.google.com/maps?q=22.6367598,88.449127&hl=en&z=16&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </section>
             </div>
 
             <!-- Transportation Details -->
-            <section class="address-card p-6 md:p-10">
+            <section class="address-card p-6 md:p-10 font-bengali">
                 <h2 class="text-3xl font-bold text-gray-700 flex items-center mb-6 border-b pb-3">
                     <i data-lucide="bus" class="w-7 h-7 text-indigo-600 mr-3"></i> 
-                    How to Reach Us
+                    কিভাবে পৌঁছাবেন
                 </h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-600">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-600">
                     
+                    <!-- Local Transport -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 flex items-center">
+                            <i data-lucide="map" class="w-5 h-5 text-indigo-500 mr-2"></i> 
+                            স্থানীয় বাস রুট
+                        </h3>
+                        <ul class="list-disc list-inside space-y-1 pl-4">
+                            <li><strong>শিয়ালদহ/বিধাননগর:</strong> বাস ২১৭ উপলব্ধ।</li>
+                            <li><strong>নাগেরবাজার/সেন্ট্রাল জেল:</strong> বাস ৯১, ৯১এ উপলব্ধ।</li>
+                            <li>নাগেরবাজার এবং সেন্ট্রাল জেল একই রুটে অবস্থিত।</li>
+                            <li>শিয়ালদহ এবং বিধাননগর একই রুটে অবস্থিত।</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Nearest Station -->
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-2 flex items-center">
                             <i data-lucide="train" class="w-5 h-5 text-indigo-500 mr-2"></i> 
-                            Metro / Train
+                            নিকটবর্তী রেলওয়ে স্টেশন
                         </h3>
-                        <p>Nearest Metro Station: Central Park (20 min walk or short auto ride).</p>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2 flex items-center">
-                            <i data-lucide="bus" class="w-5 h-5 text-indigo-500 mr-2"></i> 
-                            Bus
-                        </h3>
-                        <p>Bus routes 12C, 39, and 212 stop directly at the City Center Bus Stand.</p>
+                        <ul class="list-disc list-inside space-y-1 pl-4">
+                            <li>দমদম, বিধাননগর রোড, শিয়ালদহ, দমদম ক্যান্টনমেন্ট।</li>
+                            <li><strong>দমদম থেকে:</strong> আপনাকে নাগেরবাজার আসতে হবে।</li>
+                            <li><strong>দমদম ক্যান্টনমেন্ট থেকে:</strong> সেন্ট্রাল জেল পৌঁছান এবং তারপর বাস ধরুন।</li>
+                        </ul>
                     </div>
 
+                    <!-- Cab / Taxi -->
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-2 flex items-center">
                             <i data-lucide="taxi" class="w-5 h-5 text-indigo-500 mr-2"></i> 
-                            Cab / Taxi
+                            ক্যাব / ট্যাক্সি
                         </h3>
-                        <p>Simply search for "The Grand Cultural Hall, Kolkata" on any ride-sharing app.</p>
+                        <p>সরাসরি নেভিগেশনের জন্য যেকোনো রাইড-শেয়ারিং অ্যাপে "Gopalpur House, Salua" সার্চ করুন।</p>
+                        <p class="text-sm italic mt-2">ট্রাফিক এড়াতে সময়মতো পৌঁছানোর চেষ্টা করুন।</p>
                     </div>
                 </div>
             </section>
@@ -193,14 +214,12 @@
 
     <script>
         // --- Configuration & Initialization ---
-        // Updated: Using the external link provided by the user for the Ticket page
         const TICKET_LINK = "https://jagoronculturalsio.github.io/ticket/"; 
-        const VENUE_ADDRESS = "The Grand Cultural Hall, 5/A, Kabi Nazrul Sarani Road, Kolkata - 700064, India";
+        const MAP_DIRECTIONS_URL = "https://www.google.com/maps/place/Gopalpur+Sporting+Club+Football+Field/@22.6380662,88.4475445,17.75z/data=!4m10!1m2!2m1!1sGopalpur+House,+Football+Ground!3m6!1s0x39f89fb7e69058fd:0xf2e3ca194cc65d5b!8m2!3d22.6367598!4d88.449127!15sCh9Hb3BhbHB1ciBIb3VzZSwgRm9vdGJhbGwgR3JvdW5kWiAiHmdvcGFscHVyIGhvdXNlIGZvb3RiYWxsIGdyb3VuZJIBCnBsYXlncm91bmSaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVUXljazAyWlVOUkVBReABAPoBBAgAEBk!16s%2Fg%2F11c3k51_10?hl=en&entry=ttu&g_ep=EgoyMDI1MTEwOS4wIKXMDSoASAFQAw%3D%3D"; 
 
         // --- Firebase/Auth Setup (Mandatory in this environment) ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        // Note: Included for environment compliance.
 
         // Initialize Lucide Icons
         window.addEventListener('load', () => {
@@ -211,15 +230,12 @@
 
         // --- Interaction Logic: Ticket Button Handler ---
         function handleTicketClick() {
-            // Function to handle the Ticket button, ensuring it opens in the SAME tab.
             window.location.href = TICKET_LINK;
         }
         
         // --- Interaction Logic: Get Directions ---
         function getDirections() {
-            // Opens Google Maps with the venue address for easy navigation.
-            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(VENUE_ADDRESS)}`;
-            window.open(url, '_blank');
+            window.open(MAP_DIRECTIONS_URL, '_blank');
         }
 
     </script>
